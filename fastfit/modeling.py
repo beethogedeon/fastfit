@@ -1,7 +1,6 @@
 import copy
 
 from typing import Optional
-from torch.autograd import Variable
 from dataclasses import dataclass, field
 
 import torch
@@ -625,7 +624,7 @@ class FastFitTrainable(PreTrainedModel):
                 a, b = Q[:bs, :, :], Q[bs:, :, :]
 
         else:
-            lbls = Variable(labels.type(torch.DoubleTensor), requires_grad=True)
+            lbls = labels.double()
             if self.config.rep_tokens == "all":
                 sim_mat = self.query_doc_similarity_matrix(
                     Q, D, query_attention_mask, doc_attention_mask,

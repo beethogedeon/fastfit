@@ -458,7 +458,7 @@ class FastFitTrainer:
                 self.data_args.dataset_name,
                 self.data_args.dataset_config_name,
                 cache_dir=self.model_args.cache_dir,
-                use_auth_token=True if self.model_args.use_auth_token else None,
+                token=True if self.model_args.use_auth_token else None,
             )
         else:
             # Loading a dataset from your local files.
@@ -492,7 +492,7 @@ class FastFitTrainer:
                     "csv",
                     data_files=data_files,
                     cache_dir=self.model_args.cache_dir,
-                    use_auth_token=True if self.model_args.use_auth_token else None,
+                    token=True if self.model_args.use_auth_token else None,
                 )
             else:
                 # Loading a dataset from local json files
@@ -500,7 +500,7 @@ class FastFitTrainer:
                     "json",
                     data_files=data_files,
                     cache_dir=self.model_args.cache_dir,
-                    use_auth_token=True if self.model_args.use_auth_token else None,
+                    token=True if self.model_args.use_auth_token else None,
                 )
 
         self.is_regression = raw_datasets["train"].features[
@@ -566,7 +566,7 @@ class FastFitTrainer:
             cache_dir=self.model_args.cache_dir,
             use_fast=self.model_args.use_fast_tokenizer,
             revision=self.model_args.model_revision,
-            use_auth_token=True if self.model_args.use_auth_token else None,
+            token=True if self.model_args.use_auth_token else None,
         )
         if self.data_args.added_tokens_per_label is not None:
             if self.data_args.added_tokens_per_label > 0:
@@ -875,9 +875,9 @@ class FastFitTrainer:
 
     def set_trainer(self):
 
-        if type(self.data_args.metric_name) == str: # single metric name
+        if isinstance(self.data_args.metric_name, str):  # single metric name
             metrics = [load(self.data_args.metric_name, experiment_id=uuid.uuid4())]
-        elif type(self.data_args.metric_name) == list: # compute multiple metrics
+        elif isinstance(self.data_args.metric_name, list):  # compute multiple metrics
             metrics = []
             for metric in self.data_args.metric_name:
                 try:
